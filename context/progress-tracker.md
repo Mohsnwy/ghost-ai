@@ -9,7 +9,8 @@ change.
 
 ## Current Goal
 
-- Adding design system and UI primitive components
+- Implement Feature 02 editor chrome: navbar, floating
+  project sidebar, and dialog pattern readiness.
 
 ## Completed
 
@@ -17,18 +18,24 @@ change.
 - Installed lucide-react
 - Created lib/utils.ts with cn() helper
 - Configured dark theme
+- Feature 02 editor chrome:
+  - Added `components/editor/editor-navbar.tsx`
+  - Added `components/editor/project-sidebar.tsx`
+  - Confirmed dialog pattern supports title, description,
+    and footer actions with global color tokens
 
 ## In Progress
 
-- None yet.
+- None.
 
 ## Next Up
 
-- [First unit to build]
+- Integrate editor chrome into an editor screen when the next
+  feature spec defines the screen-level behavior.
 
 ## Open Questions
 
-- [Any unresolved product or technical decisions]
+- None for Feature 02.
 
 ## Architecture Decisions
 
@@ -37,4 +44,14 @@ change.
 
 ## Session Notes
 
-- [Context needed to resume work in the next session]
+- Attempted to begin Feature 02 on 2026-05-24, but
+  `context/feature-specs/02-editor.md` was 0 bytes. No editor
+  implementation was started to avoid inventing undocumented
+  behavior.
+- Feature 02 spec is now available and scoped to reusable editor
+  chrome components only; no project data model or actual dialog
+  flows should be introduced in this unit.
+- `npm run lint` passed.
+- `npm run build` passed after allowing network access for
+  `next/font` Google Fonts fetches; the first sandboxed attempt
+  failed only on font fetches.
