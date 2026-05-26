@@ -10,7 +10,7 @@ Requirements:
 - left section contains sidebar toggle button 
 - use `PanelLeftOpen` / `PanelLeftClose` icons based on sidebar state
 - right section stays empty for now 
-- dark background with subtle buttom border 
+- dark background with subtle bottom border 
 
 ### Project Sidebar
 Create `components/editor/project-sidebar.tsx`.
@@ -20,7 +20,7 @@ Requirements:
 - sidebar should float above the editor canvas
 - opening it should not push content 
 - slides in from the left
-- accepts `isOpen` prop
+- accepts `isOpen` and `onClose` prop
 - header with `projects` title + close button
 - shadcn `Tabs`:
   - My Projects
