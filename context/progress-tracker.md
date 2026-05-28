@@ -5,11 +5,12 @@ change.
 
 ## Current Phase
 
-- Feature 03 complete pending manual auth flow check
+- Feature 04 complete pending manual dialog flow check
 
 ## Current Goal
 
-- Manual browser verification of Clerk sign-in/sign-up flows.
+- Manual browser verification of project dialog flows on desktop
+  and mobile.
 
 ## Completed
 
@@ -35,15 +36,28 @@ change.
   - Updated auth pages to a screenshot-aligned 50/50 desktop layout
     with a distinct left product panel and Clerk forms using app font
     and color tokens
+- Feature 04 project dialogs:
+  - Added mock owned and shared project data
+  - Added dedicated project dialog hook for dialog state, form state,
+    and loading state
+  - Added editor home content with `New Project` button
+  - Wired home and sidebar create actions to the Create Project dialog
+  - Added live slug preview for project creation
+  - Added Rename Project dialog with prefilled, auto-focused input
+  - Added Delete Project destructive confirmation dialog
+  - Added owned-project sidebar rename/delete actions
+  - Kept shared-project sidebar items action-free
+  - Added mobile sidebar backdrop scrim that closes the sidebar
+  - Fixed mock project dialog submissions so create, rename, and delete
+    update the sidebar's local project list
 
 ## In Progress
 
-- Manual browser verification of live Clerk auth flow and responsive
-  auth page layout.
+- Manual browser verification of Feature 04 project dialog flows.
 
 ## Next Up
 
-- Continue with the next feature spec after manual auth flow
+- Continue with the next feature spec after manual Feature 04
   verification.
 
 ## Open Questions
@@ -80,6 +94,16 @@ change.
   outside app source.
 - `npm run build` passed after allowing network access for
   `next/font` Google Fonts fetches.
+- Started Feature 04 project dialogs on 2026-05-26 from
+  `context/feature-specs/04-project-dialogs.md`.
+- Implemented Feature 04 project dialogs and editor home on
+  2026-05-26 using mock data only; no API calls or persistence were
+  added.
+- `npm run lint` passed with the same warning from
+  `.agents/skills/clerk-tanstack-patterns/templates/tanstack-basic-auth/src/routes/__root.tsx`,
+  outside app source.
+- `npm run build` passed after allowing network access for
+  `next/font` Google Fonts fetches.
 - Refined the auth page UI on 2026-05-26 to better match the provided
   screenshot: equal desktop split, colored left panel, product feature
   rows, and Clerk appearance tied to `--font-sans`.
@@ -88,3 +112,6 @@ change.
   outside app source.
 - `npm run build` passed after allowing network access for
   `next/font` Google Fonts fetches.
+- Fixed Feature 04 mock project dialog state on 2026-05-26. The create,
+  rename, and delete flows now mutate hook-owned local mock state instead
+  of only closing their dialogs.
