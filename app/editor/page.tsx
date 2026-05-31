@@ -1,5 +1,22 @@
-import { EditorShell } from "@/components/editor/editor-shell"
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-export default function EditorPage() {
-  return <EditorShell />
+import { EditorShell } from "@/components/editor/editor-shell";
+import { getProjectsForUser } from "@/lib/projects";
+
+export default async function EditorPage() {
+  const { userId } = await auth();
+
+  if (!userId) {
+    redirect("/sign-in");
+  }
+
+  const { ownedProjects, sharedProjects } = await getProjectsForUser(userId);
+
+  return (
+    <EditorShell
+      ownedProjects={ownedProjects}
+      sharedProjects={sharedProjects}
+    />
+  );
 }

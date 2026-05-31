@@ -1,22 +1,23 @@
 "use client"
 
-import { Pencil, Plus, Trash2, X } from "lucide-react"
+import { Pencil, Plus, Trash2, X } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import type { MockProject } from "@/components/editor/use-project-dialogs"
-import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { Project } from "@/hooks/use-project-actions";
+import { cn } from "@/lib/utils";
 
 type ProjectSidebarProps = {
-  isOpen: boolean
-  ownedProjects: MockProject[]
-  sharedProjects: MockProject[]
-  onClose?: () => void
-  onCreateProject?: () => void
-  onDeleteProject?: (project: MockProject) => void
-  onRenameProject?: (project: MockProject) => void
-  className?: string
-}
+  isOpen: boolean;
+  ownedProjects: Project[];
+  sharedProjects: Project[];
+  onClose?: () => void;
+  onCreateProject?: () => void;
+  onDeleteProject?: (project: Project) => void;
+  onOpenProject?: (project: Project) => void;
+  onRenameProject?: (project: Project) => void;
+  className?: string;
+};
 
 function EmptyProjectsState() {
   return (
@@ -30,30 +31,41 @@ function ProjectList({
   projects,
   showActions,
   onDeleteProject,
+  onOpenProject,
   onRenameProject,
 }: {
-  projects: MockProject[]
-  showActions: boolean
-  onDeleteProject?: (project: MockProject) => void
-  onRenameProject?: (project: MockProject) => void
+  projects: Project[];
+  showActions: boolean;
+  onDeleteProject?: (project: Project) => void;
+  onOpenProject?: (project: Project) => void;
+  onRenameProject?: (project: Project) => void;
 }) {
   if (projects.length === 0) {
-    return <EmptyProjectsState />
+    return <EmptyProjectsState />;
   }
 
   return (
     <div className="space-y-2">
       {projects.map((project) => (
         <div
-          className="group flex min-h-12 items-center gap-2 rounded-lg border border-border bg-background/40 px-3 py-2"
           key={project.id}
+          role="button"
+          tabIndex={0}
+          onClick={() => onOpenProject?.(project)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              onOpenProject?.(project);
+            }
+          }}
+          className="group flex min-h-12 items-center gap-2 rounded-lg border border-border bg-background/40 px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-foreground">
               {project.name}
             </p>
             <p className="truncate font-mono text-xs text-muted-foreground">
-              {project.slug}
+              {project.id}
             </p>
           </div>
 
@@ -61,7 +73,10 @@ function ProjectList({
             <div className="flex shrink-0 items-center gap-1 opacity-100 sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
               <Button
                 aria-label={`Rename ${project.name}`}
-                onClick={() => onRenameProject?.(project)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onRenameProject?.(project);
+                }}
                 size="icon-xs"
                 type="button"
                 variant="ghost"
@@ -70,7 +85,10 @@ function ProjectList({
               </Button>
               <Button
                 aria-label={`Delete ${project.name}`}
-                onClick={() => onDeleteProject?.(project)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onDeleteProject?.(project);
+                }}
                 size="icon-xs"
                 type="button"
                 variant="ghost"
@@ -82,7 +100,7 @@ function ProjectList({
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 function ProjectSidebar({
@@ -92,6 +110,7 @@ function ProjectSidebar({
   onClose,
   onCreateProject,
   onDeleteProject,
+  onOpenProject,
   onRenameProject,
   className,
 }: ProjectSidebarProps) {
@@ -128,13 +147,18 @@ function ProjectSidebar({
         <TabsContent className="mt-0 min-h-0" value="my-projects">
           <ProjectList
             onDeleteProject={onDeleteProject}
+            onOpenProject={onOpenProject}
             onRenameProject={onRenameProject}
             projects={ownedProjects}
             showActions
           />
         </TabsContent>
         <TabsContent className="mt-0 min-h-0" value="shared">
-          <ProjectList projects={sharedProjects} showActions={false} />
+          <ProjectList
+            onOpenProject={onOpenProject}
+            projects={sharedProjects}
+            showActions={false}
+          />
         </TabsContent>
       </Tabs>
 

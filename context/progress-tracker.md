@@ -5,12 +5,11 @@ change.
 
 ## Current Phase
 
-- Feature 04 complete pending manual dialog flow check
+- Feature 07 editor home wiring complete
 
 ## Current Goal
 
-- Manual browser verification of project dialog flows on desktop
-  and mobile.
+- Move to the next feature spec after Feature 07 verification.
 
 ## Completed
 
@@ -50,14 +49,36 @@ change.
   - Added mobile sidebar backdrop scrim that closes the sidebar
   - Fixed mock project dialog submissions so create, rename, and delete
     update the sidebar's local project list
+- Feature 05 Prisma schema and data layer:
+  - Added `prisma/schema.prisma` with `Project`, `ProjectCollaborator`,
+    and `ProjectStatus`
+  - Added indices on `ownerId`, `createdAt`, `collaboratorEmail`, and
+    `(projectId, createdAt)`
+  - Added `lib/prisma.ts` with a cached Prisma Client singleton
+    and adapter switching for Accelerator vs direct PostgreSQL
+
+- Feature 06 Project APIs:
+  - Added backend REST endpoints `GET /api/projects`, `POST /api/projects`,
+    `PATCH /api/projects/[projectId]`, and `DELETE /api/projects/[projectId]`.
+  - Endpoints use Clerk server `userId` as `ownerId`; unauthenticated
+    requests return `401` and non-owner mutations return `403`.
+- Feature 07 editor home wiring:
+  - Added `lib/projects.ts` with server-side project data helpers for owned
+    and shared projects.
+  - Updated `/editor` to fetch project lists server-side and pass them into
+    the client shell.
+  - Created `hooks/use-project-actions.ts` for create, rename, delete,
+    dialog state, mutation requests, and workspace navigation.
+  - Added `/editor/[projectId]` workspace route and delete redirect behavior
+    when the active workspace is removed.
 
 ## In Progress
 
-- Manual browser verification of Feature 04 project dialog flows.
+- None.
 
 ## Next Up
 
-- Continue with the next feature spec after manual Feature 04
+- Continue with the next feature spec after Prisma migration and build
   verification.
 
 ## Open Questions
