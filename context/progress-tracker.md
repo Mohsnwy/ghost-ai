@@ -5,12 +5,11 @@ change.
 
 ## Current Phase
 
-- Feature 04 complete pending manual dialog flow check
+- Feature 05 Prisma schema and data layer complete
 
 ## Current Goal
 
-- Manual browser verification of project dialog flows on desktop
-  and mobile.
+- Move to the next feature spec after Feature 05 verification.
 
 ## Completed
 
@@ -50,14 +49,21 @@ change.
   - Added mobile sidebar backdrop scrim that closes the sidebar
   - Fixed mock project dialog submissions so create, rename, and delete
     update the sidebar's local project list
+- Feature 05 Prisma schema and data layer:
+  - Added `prisma/schema.prisma` with `Project`, `ProjectCollaborator`,
+    and `ProjectStatus`
+  - Added indices on `ownerId`, `createdAt`, `collaboratorEmail`, and
+    `(projectId, createdAt)`
+  - Added `lib/prisma.ts` with a cached Prisma Client singleton
+    and adapter switching for Accelerator vs direct PostgreSQL
 
 ## In Progress
 
-- Manual browser verification of Feature 04 project dialog flows.
+- None.
 
 ## Next Up
 
-- Continue with the next feature spec after manual Feature 04
+- Continue with the next feature spec after Prisma migration and build
   verification.
 
 ## Open Questions
