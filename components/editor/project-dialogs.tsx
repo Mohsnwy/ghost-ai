@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 
-import type { ProjectDialogState } from "@/components/editor/use-project-dialogs"
+import type { ProjectDialogState } from "@/hooks/use-project-actions";
 
 type ProjectDialogsProps = {
   dialog: ProjectDialogState
@@ -72,7 +72,7 @@ function ProjectDialogs({
                 value={projectName}
               />
               <p className="text-xs text-muted-foreground">
-                Slug preview:{" "}
+                Room ID preview:{" "}
                 <span className="font-mono text-foreground">{slugPreview}</span>
               </p>
             </div>

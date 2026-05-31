@@ -1,17 +1,27 @@
 "use client"
 
-import { useState } from "react"
-import { Plus } from "lucide-react"
+import { useState } from "react";
+import { Plus } from "lucide-react";
 
-import { EditorNavbar } from "@/components/editor/editor-navbar"
-import { ProjectSidebar } from "@/components/editor/project-sidebar"
-import { ProjectDialogs } from "@/components/editor/project-dialogs"
-import { useProjectDialogs } from "@/components/editor/use-project-dialogs"
-import { Button } from "@/components/ui/button"
+import { EditorNavbar } from "@/components/editor/editor-navbar";
+import { ProjectSidebar } from "@/components/editor/project-sidebar";
+import { ProjectDialogs } from "@/components/editor/project-dialogs";
+import { useProjectActions, type Project } from "@/hooks/use-project-actions";
+import { Button } from "@/components/ui/button";
 
-function EditorShell() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
-  const projectDialogs = useProjectDialogs()
+type EditorShellProps = {
+  ownedProjects: Project[];
+  sharedProjects: Project[];
+  activeProject?: Project;
+};
+
+function EditorShell({
+  activeProject,
+  ownedProjects,
+  sharedProjects,
+}: EditorShellProps) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const projectActions = useProjectActions(ownedProjects, sharedProjects);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -29,41 +39,59 @@ function EditorShell() {
       )}
       <ProjectSidebar
         isOpen={isSidebarOpen}
-        onCreateProject={projectDialogs.openCreateDialog}
+        onCreateProject={projectActions.openCreateDialog}
         onClose={() => setIsSidebarOpen(false)}
-        onDeleteProject={projectDialogs.openDeleteDialog}
-        onRenameProject={projectDialogs.openRenameDialog}
-        ownedProjects={projectDialogs.ownedProjects}
-        sharedProjects={projectDialogs.sharedProjects}
+        onDeleteProject={projectActions.openDeleteDialog}
+        onOpenProject={projectActions.openProject}
+        onRenameProject={projectActions.openRenameDialog}
+        ownedProjects={projectActions.ownedProjects}
+        sharedProjects={projectActions.sharedProjects}
       />
       <main className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center px-6 text-center">
-        <div className="max-w-lg space-y-5">
-          <div className="space-y-3">
-            <h1 className="text-2xl font-semibold tracking-normal text-foreground">
-              Create a project or open an existing one
-            </h1>
-            <p className="text-sm leading-6 text-muted-foreground">
-              Start a new architecture workspace, or choose a project from the sidebar.
-            </p>
+        {activeProject ? (
+          <div className="max-w-4xl space-y-6 text-left">
+            <div className="rounded-3xl border border-border bg-card/70 p-8 shadow-soft">
+              <h1 className="text-3xl font-semibold tracking-normal text-foreground">
+                {activeProject.name}
+              </h1>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Project ID: {activeProject.id}
+              </p>
+            </div>
+            <div className="rounded-3xl border border-border bg-background/80 p-8 text-sm leading-7 text-foreground">
+              <p className="text-muted-foreground">This workspace is connected to the selected project.</p>
+              <p className="mt-4 text-foreground">Use the sidebar to rename, delete, or open another project.</p>
+            </div>
           </div>
-          <Button onClick={projectDialogs.openCreateDialog} type="button">
-            <Plus className="size-4" />
-            New Project
-          </Button>
-        </div>
+        ) : (
+          <div className="max-w-lg space-y-5">
+            <div className="space-y-3">
+              <h1 className="text-2xl font-semibold tracking-normal text-foreground">
+                Create a project or open an existing one
+              </h1>
+              <p className="text-sm leading-6 text-muted-foreground">
+                Start a new architecture workspace, or choose a project from the sidebar.
+              </p>
+            </div>
+            <Button onClick={projectActions.openCreateDialog} type="button">
+              <Plus className="size-4" />
+              New Project
+            </Button>
+          </div>
+        )}
       </main>
       <ProjectDialogs
-        dialog={projectDialogs.dialog}
-        isLoading={projectDialogs.isLoading}
-        onClose={projectDialogs.closeDialog}
-        onProjectNameChange={projectDialogs.onProjectNameChange}
-        onSubmitDelete={projectDialogs.submitDeleteProject}
-        onSubmitProjectForm={projectDialogs.submitProjectForm}
-        projectName={projectDialogs.projectName}
-        slugPreview={projectDialogs.slugPreview}
+        dialog={projectActions.dialog}
+        isLoading={projectActions.isLoading}
+        onClose={projectActions.closeDialog}
+        onProjectNameChange={projectActions.onProjectNameChange}
+        onSubmitDelete={projectActions.submitDeleteProject}
+        onSubmitProjectForm={projectActions.submitProjectForm}
+        projectName={projectActions.projectName}
+        slugPreview={projectActions.slugPreview}
       />
     </div>
-  )
+  );
 }
 
-export { EditorShell }
+export { EditorShell };
